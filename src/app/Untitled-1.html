@@ -1,0 +1,111 @@
+
+<div class="float-right table-container" id="main-container">
+    <div class="container">
+       <div class="row">
+          <div class="col-9">
+    <h3>Liste des financements</h3>
+          </div>
+ <div class="col-3">
+     <form class="form-inline my-2 col-3 my-lg-0">
+      </form>
+    </div>
+      </div>
+      </div>
+     <table class="table table-striped table-hover" id="example" >
+ 
+             <thead>
+             <tr>
+                 
+                 <th scope="col-3">Code</th>
+                 <th scope="col-3">Montant en device</th>
+                 <th scope="col-3">Montant en monnaie local</th>
+                 <th scope="col">Taux de change</th>
+                    <th scope="col">Date de signature</th>
+                    <th scope="col">Date du premier paiement</th>
+                    <th scope="col">Date du dernier paiement</th>
+                    <th scope="col">Numéro loi de finance</th>
+                    <th scope="col">Date loi de finance</th>
+                    <th scope="col">Bailleur</th>
+             </tr>
+             </thead>
+             <tbody>
+             <tr *ngFor = "let financement of financements">
+                 <th scope="row">{{financement?.code}}</th>
+                 <td>{{financement?.montant_device}}</td>
+                     <td>$ {{financement?.montant_monnaie_local}}</td>
+                 <td>{{financement?.taux_change}} </td>
+                 <td>{{financement?.date_signature}} </td>
+                 <td>{{financement?.date_premier_paiement}} </td>
+                 <td>{{financement?.date_dernier_paiement}} </td>
+                 <td>{{financement?.numero_loi_finance}} </td>
+                 <td>{{financement?.date_loi_finance}} </td>
+                 <td>
+                  <li class="list-inline-item">
+                      <button class="btn btn-success btn-sm rounded-5" (click)="onOpenModal(financement, 'edit')" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                  </li>
+                  <li class="list-inline-item">
+                  <button class="btn btn-danger btn-sm rounded-5" (click)="onOpenModal(financement, 'delete')" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                  </li>
+                </tr>
+             </tbody>
+     </table>
+ 
+     <button (click)="onOpenModal(null, 'add')" class=" btnAdd" style="margin-top: 2%; margin-right: 2%; margin-left: 2%; border-radius: 8%; background-color: #9AADFC;"><i class="fas fa-plus"></i> Add a financement</button>
+ 
+ </div>
+ 
+ <!-- Add financement Modal -->
+ <div class="modal fade" id="addFinancementModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addfinancementModalLabel" style="font-weight: 700;">Add a new financement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+          
+         </div>
+      </div>
+    </div>
+ </div>
+ <!-- Update financement Modal -->
+ <div class="modal fade" id="updatefinancementModal" tabindex="-1" role="dialog" aria-labelledby="financementEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="updatefinancementModalLabel">Edit financement{{editFinancement?.code}}</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+        
+          </div>
+       </div>
+    </div>
+ </div>
+ 
+ <!-- Delete financement Modal -->
+ <div class="modal fade" id="deletefinancementModal" tabindex="-1" code="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+     <div class="modal-dialog" code="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="deleteModelLabel">Delete financement</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <p>Are you sure you want to delete this financement with code = {{deleteFinancement?.code}} </p>
+              <div class="modal-footer">
+                <button (click)="onDeleteFinancement(deleteFinancement.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              </div>
+           </div>
+        </div>
+     </div>
+   </div>
+   
+ 

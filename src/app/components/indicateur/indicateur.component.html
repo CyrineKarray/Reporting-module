@@ -1,0 +1,360 @@
+
+
+
+
+   
+    <div class="main-panel" id="main-container">
+   
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12" >
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-success">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <h4 class="nav-tabs-title">Liste des indicateurs :</h4>
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" (click)="onOpenModal(null, 'add')" type="button" data-toggle="modal" data-target="#addindicateurModal" >
+                            <i class="material-icons">downloading</i> Ajouter
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#messages" data-toggle="tab">
+                            <i class="material-icons">downloading</i> Télécharger PDF
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#settings" data-toggle="tab">
+                            <i class="material-icons">code</i> Télécharger HTML
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive" >
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          Code
+                        </th>
+                        <th>
+                          Désignation
+                        </th>
+                        <th>
+                          Fréquence
+                        </th>
+                        <th>
+                          Méthodologie
+                        </th>
+                        <th>
+                          Hypothése
+                        </th>
+                        <th>
+                          Action
+                        </th>
+                      </thead>
+                      <tbody *ngFor = "let indicateur of indicateurs">
+                        <tr>
+                          <td>
+                            {{indicateur.code}}
+                          </td>
+                          <td>
+                            {{indicateur.designation}}
+                          </td>
+                          <td>
+                            {{indicateur.frequence}}
+                          </td>
+                          <td>
+                            {{indicateur.methodologie}}
+                          </td>
+                          <td class="text-primary">
+                            {{indicateur.hypothese}}     
+                          </td>
+                          <td>
+                            <button type="button" data-toggle="modal" data-target="getDetailsModal" class="btn btn-primary btn-link btn-sm" (click)="onOpenModal(indicateur, 'details')">
+                              <i class="material-icons">search</i>
+                            </button>
+                      
+                            <button type="button" (click)="onOpenModal(indicateur, 'edit')" rel="tooltip" title="Edit Task" class="btn btn-warning btn-link btn-sm">
+                              <i class="material-icons">edit</i>
+                            </button>
+                            <button type="button"  (click)="onOpenModal(indicateur, 'delete')"  rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                              <i class="material-icons">close</i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+          </div>
+          
+        </div>
+        
+      </div>
+
+    
+
+
+<div class="modal fade" id="getDetailsModal" tabindex="-1" resp_collecte="dialog" aria-labelledby="indicateurGetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="getDetailsModalLabel"><b>Détail du indicateur {{indicateurDetails?.indicateur?.designation}} </b></h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <br>
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Frequence : </strong>{{indicateurDetails?.frequence}}</li>
+            <li class="list-group-item"><strong>Methodologie : </strong>{{indicateurDetails?.methodologie}}</li>
+            <li class="list-group-item"><strong>Hypothése : </strong>{{indicateurDetails?.hypothese}}</li>
+            <li class="list-group-item"><strong>Formule : </strong>{{indicateurDetails?.formule}}</li>
+            <li class="list-group-item"><strong>Responsable collecte : </strong>{{indicateurDetails?.resp_collecte}}</li>
+            <li class="list-group-item"><strong>Responsable synthése : </strong>{{indicateurDetails?.resp_synthese}}</li>
+            <li class="list-group-item"><strong>Source de données : </strong>{{indicateurDetails?.source_donnees}}</li>
+            <li class="list-group-item"><strong>Nature : </strong>{{indicateurDetails?.nature}}</li>
+            <li class="list-group-item"><strong>Définition : </strong>{{indicateurDetails?.definition}}</li>
+            <li class="list-group-item"><strong>Origine : </strong>{{indicateurDetails?.origine}}</li>
+            <li class="list-group-item"><strong>Risque : </strong>{{indicateurDetails?.risque}}</li>
+          </ul>
+        </div>
+       </div>
+</div>
+
+
+<!-- Add Indicateur Modal -->
+<div class="modal fade" id="addIndicateurModal" tabindex="-1" resp_collecte="dialog" aria-labelledby="addindicateurModalLabel" aria-hidden="true">
+    <div class="modal-dialog" resp_collecte="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addIndicateurModalLabel" style="font-weight: 700;">Ajouter un nouveau indicateur</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form  #addForm="ngForm" (ngSubmit)="onAddIndicateur(addForm)">
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="code">Code</label>
+                  <input ngModel type="number" class="form-control" id="code" name="code" placeholder="Le code" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="designation">Désignation</label>
+                  <input ngModel type="text" class="form-control" id="designation" name="designation" placeholder="Désignation"  required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="frequence">Fréquence</label>
+                   <input ngModel type="text"  class="form-control" id="frequence" name="frequence" placeholder="frequence" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="methodologie">Méthodologie</label>
+                   <input  ngModel type="text"  class="form-control" id="methodologie" name="methodologie" placeholder="methodologie" required>
+                 </div>
+             </div>
+             <div class="form-row">
+                <div class="form-group col-md-12">
+                   <label for="formule">Formule</label>
+                   <input ngModel type="text"  class="form-control" id="formule" name="formule" placeholder="Formule" required>
+                 </div>
+             </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="hypothese">Hypothése</label>
+                   <input ngModel type="text"  class="form-control" id="hypothese" name="hypothese" placeholder="Hypothése" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                    <label for="resp_collecte">Responsable collecte</label>
+                    <input ngModel type="text" class="form-control" id="resp_collecte" name="resp_collecte" placeholder="Responsable collecte" required>
+                  </div>
+             </div>
+
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="resp_synthese">Responsable synthése</label>
+                   <input ngModel type="text" class="form-control" id="resp_synthese" name="resp_synthese" placeholder="Responsable synthése" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="source_donnees">Source de données</label>
+                   <input ngModel type="text" class="form-control" id="source_donnees" name="source_donnees" placeholder="Source de données" required>
+                 </div>
+             </div>
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="nature">Nature</label>
+                   <input ngModel type="text"  class="form-control" id="nature" name="nature" placeholder="nature" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="definition">Definition</label>
+                   <input  ngModel type="text"  class="form-control" id="definition" name="definition" placeholder="definition" required>
+                 </div>
+             </div>
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="origine">Origine</label>
+                   <input ngModel type="text"  class="form-control" id="origine" name="origine" placeholder="origine" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="risque">Risque</label>
+                   <input  ngModel type="text"  class="form-control" id="risque" name="risque" placeholder="risque" required>
+                 </div>
+             </div>
+
+          <!--  <div class="form-row" *ngFor="let match of matchs">
+                haha
+             <div class="form-group col-md-6">
+            <div class="form-check"*ngFor = "let ticket of match.ticketEntities">
+               <input class="form-check-input" type="checkbox" value="" ngModel id="ticketEntities" name="ticketEntities">
+               <label class="form-check-label" for="ticketEntities">
+                  {{ticket.ticketNumber}}
+               </label>
+             </div>
+            </div>
+            </div> --> 
+            <div class="modal-footer">
+               <button type="button" id="add-indicateur-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            </form>
+
+      </div>
+    </div>
+    
+</div>
+</div>
+
+<div class="modal fade" id="updateIndicateurModal" tabindex="-1" formule="dialog" aria-labelledby="MatchEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" formule="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="updateIndicateurModalLabel"><b>Modifier Indicateur</b></h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <form #editForm="ngForm">
+                <input type="hidden" ngModel="{{editIndicateur?.id}}" name="id" class="form-control" id="id">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="code">Code</label>
+                       <input ngModel="{{editIndicateur?.code}}" type="number" class="form-control" id="code" name="code" placeholder="Le code" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="designation">Nom du Indicateur</label>
+                      <input ngModel="{{editIndicateur?.designation}}" type="text" class="form-control" id="designation" name="designation" placeholder="Nom du Indicateur"  required>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                       <label for="frequence">frequence</label>
+                       <input ngModel="{{editIndicateur?.frequence}}" type="text" class="form-control" id="frequence" name="frequence" placeholder="frequence" required>
+                     </div>
+                     <div class="form-group col-md-6">
+                       <label for="methodologie">methodologie</label>
+                       <input  ngModel="{{editIndicateur?.methodologie}}" type="text" class="form-control" id="methodologie" name="methodologie" placeholder="methodologie" required>
+                     </div>                                                         
+                 </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                       <label for="hypothese">Hypothése</label>
+                       <input ngModel="{{editIndicateur?.hypothese}}" type="text"  class="form-control" id="hypothese" name="hypothese" placeholder="Hypothése" required>
+                     </div>
+                     <div class="form-group col-md-6">
+                        <label for="formule">formule</label>
+                        <input ngModel="{{editIndicateur?.formule}}" type="text" class="form-control" id="formule" name="formule" placeholder="formule" required>
+                      </div>
+                 </div>
+                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                       <label for="resp_collecte">Responsable collecte</label>
+                       <input ngModel="{{editIndicateur?.resp_collecte}}" type="text" class="form-control" id="resp_collecte" name="resp_collecte" placeholder="Responsable collecte" required>
+                     </div>
+                     <div class="form-group col-md-6">
+                       <label for="resp_synthese">Responsable synthese</label>
+                       <input  ngModel="{{editIndicateur?.resp_synthese}}" type="text" class="form-control" id="resp_synthese" name="resp_synthese" placeholder="Responsable synthese" required>
+                     </div>                                                         
+                 </div>
+                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                       <label for="source_donnees">source_donnees</label>
+                       <input ngModel="{{editIndicateur?.source_donnees}}" type="text" class="form-control" id="source_donnees" name="source_donnees" placeholder="source_donnees" required>
+                     </div>
+                     <div class="form-group col-md-6">
+                       <label for="nature">nature</label>
+                       <input  ngModel="{{editIndicateur?.nature}}" type="text" class="form-control" id="nature" name="nature" placeholder="nature" required>
+                     </div>                                                         
+                 </div>
+
+                 <div class="form-row">
+             
+                     <div class="form-group col-md-6">
+                       <label for="origine">Origine</label>
+                       <input  ngModel="{{editIndicateur?.origine}}" type="text" class="form-control" id="origine" name="origine" placeholder="origine" required>
+                     </div> 
+                     <div class="form-group col-md-6">
+                        <label for="risque">Risque</label>
+                        <input ngModel="{{editIndicateur?.risque}}" type="text" class="form-control" id="risque" name="risque" placeholder="risque" required>
+                      </div>                                                        
+                 </div>
+                 <div class="form-row">
+
+                     <div class="form-group col-md-6">
+                        <label for="definition">Definition</label>
+                        <textarea ngModel="{{editIndicateur?.definition}}" id="definition" name="definition" placeholder="definition"
+                        rows="6" cols="56">
+              </textarea>    
+                      </div>
+                                                                  
+                 </div>
+                 
+                 
+ 
+                <div class="modal-footer">
+                   <button type="button" id="add-edit-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                   <button (click)="onUpdateIndicateur(editForm.value)" data-dismiss="modal" type="submit" class="btn btn-primary">Modifier</button>
+                </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+<!-- Delete Indicateur Modal -->
+<div class="modal fade" id="deleteIndicateurModal" tabindex="-1" resp_collecte="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+   <div class="modal-dialog" resp_collecte="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="deleteModelLabel">Supprimer l Indicateur ?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <p>Vous etes sur de bien vouloir supprimer le Indicateur ayant le code : {{deleteIndicateur?.code}}  </p>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+               <button (click)="onDeleteIndicateur(deleteIndicateur.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+            </div>
+         </div>
+      </div>
+   </div>
+ </div>
+
+

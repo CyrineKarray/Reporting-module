@@ -1,0 +1,497 @@
+
+
+
+
+   
+    <div class="main-panel" id="main-container">
+   
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12" >
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-success">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <h4 class="nav-tabs-title">Liste des financements :</h4>
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" (click)="onOpenModal(null, 'add')" type="button" data-toggle="modal" data-target="#addFinancementModal" >
+                            <i class="material-icons">downloading</i> Ajouter
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#messages" data-toggle="tab">
+                            <i class="material-icons">downloading</i> Télécharger PDF
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#settings" data-toggle="tab">
+                            <i class="material-icons">code</i> Télécharger HTML
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive" >
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>
+                          Code
+                        </th>
+                        <th>
+                          Date
+                        </th>
+                        <th>
+                          Montant en devise
+                        </th>
+                        <th>
+                          Montant en monnaie local
+                        </th>
+                        <th>
+                          Taux de change
+                        </th>
+                        <th>
+                          Action
+                        </th>
+                      </thead>
+                      <tbody *ngFor = "let financement of financements">
+                        <tr>
+                          <td>
+                            {{financement.code}}
+                          </td>
+                          <td>
+                            {{financement.date | date}}
+                          </td>
+                          <td>
+                            {{financement.montant_device}}
+                          </td>
+                          <td>
+                            {{financement.montant_monnaie_local}}
+                          </td>
+                          <td class="text-primary">
+                            {{financement.taux_change}}     
+                          </td>
+                          <td>
+                            <button type="button" data-toggle="modal" data-target="getDetailsModal" class="btn btn-primary btn-link btn-sm" (click)="onOpenModal(financement, 'details')">
+                              <i class="material-icons">search</i>
+                            </button>
+                      
+                            <button type="button" (click)="onOpenModal(financement, 'edit')" rel="tooltip" title="Edit Task" class="btn btn-warning btn-link btn-sm">
+                              <i class="material-icons">edit</i>
+                            </button>
+                            <button type="button"  (click)="onOpenModal(financement, 'delete')"  rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                              <i class="material-icons">close</i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+          </div>
+          
+        </div>
+        
+      </div>
+
+    
+
+  <div class="modal fade" id="getDetailsModal" tabindex="-1" resp_collecte="dialog" aria-labelledby="financementGetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="getDetailsModalLabel"><b>Détail du financement ayant le code {{financementDetails?.code}} </b></h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <br>
+          <ul class="list-group">
+            <li class="list-group-item"><strong>La date : </strong>{{financementDetails?.date | date}}</li>
+            <li class="list-group-item"><strong>Le montant en device : </strong>{{financementDetails?.montant_device}}</li>
+            <li class="list-group-item"><strong>Le montant en monnaie locale : </strong>{{financementDetails?.montant_monnaie_local}}</li>
+            <li class="list-group-item"><strong>Le taux de change : </strong>{{financementDetails?.taux_change}}</li>
+            <li class="list-group-item"><strong>La date de la signature  : </strong>{{financementDetails?.date_signature | date}}</li>
+            <li class="list-group-item"><strong>La date du premier paiement : </strong>{{financementDetails?.date_premier_paiement | date}}</li>
+            <li class="list-group-item"><strong>La date du dernier paiement : </strong>{{financementDetails?.date_dernier_paiement | date}}</li>
+            <li class="list-group-item"><strong>Le numéro de la loi de finance : </strong>{{financementDetails?.numero_loi_finance}}</li>
+            <li class="list-group-item"><strong>La date de la loi de finance : </strong>{{financementDetails?.date_loi_finance | date}}</li>
+          </ul>
+        </div>
+       </div>
+    </div>
+
+    <!-- Add Financement Modal -->
+<div class="modal fade" id="addFinancementModal" tabindex="-1" date_signature="dialog" aria-labelledby="addFinancementModalLabel" aria-hidden="true">
+  <div class="modal-dialog" date_signature="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addFinancementModalLabel" style="font-weight: 700;">Ajouter un nouveau financement</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form  #addForm="ngForm" (ngSubmit)="onAddFinancement(addForm)">
+           <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="code">Code</label>
+                <input ngModel type="number" class="form-control" id="code" name="code" placeholder="Le code" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="date">Date</label>
+                <input ngModel type="date" class="form-control" id="date" name="date" placeholder="Date"  required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="montant_device">Le montant en device</label>
+                 <input ngModel type="number" step="0.01" class="form-control" id="montant_device" name="montant_device" placeholder="Le montant en device" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="montant_monnaie_local">Le montant en monnaie locale</label>
+                 <input  ngModel type="number" step="0.01" class="form-control" id="montant_monnaie_local" name="montant_monnaie_local" placeholder="Le montant en monnaie locale" required>
+               </div>
+           </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="taux_change">Taux de change</label>
+                 <input ngModel type="number" step="0.01" class="form-control" id="taux_change" name="taux_change" placeholder="Taux de change" required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label for="date_signature">Date de la signature</label>
+                  <input ngModel type="date" class="form-control" id="date_signature" name="date_signature" placeholder="Date de la signature" required>
+                </div>
+           </div>
+           <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="date_premier_paiement">Date du premier paiement</label>
+                 <input ngModel type="date" class="form-control" id="date_premier_paiement" name="date_premier_paiement" placeholder="date_premier_paiement" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="date_dernier_paiement">Date du dernier paiement</label>
+                 <input ngModel type="date" class="form-control" id="date_dernier_paiement" name="date_dernier_paiement" placeholder="Date du dernier paiement" required>
+               </div>
+           </div>
+           <div class="form-row">
+             <div class="form-group col-md-6">
+                <label for="numero_loi_finance">Numéro de la loi de finance</label>
+                <input ngModel type="number" class="form-control" id="numero_loi_finance" name="numero_loi_finance" placeholder="Numéro de la loi de finance" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="date_loi_finance">Date de la loi de finance</label>
+                <input ngModel type="date" class="form-control" id="date_loi_finance" name="date_loi_finance" placeholder="Date de la loi de finance" required>
+              </div>
+          </div>
+          <div class="form-row">
+             <div class="form-group col-md-9">
+               <label for="bailleur">Bailleur de fond</label>
+               <select ngModel name="bailleur" id="bailleur" class="selectpicker form-control" data-live-search="true" required>
+                 <option value={{o?.id}} *ngFor="let o of bailleurs">{{o?.intitule}} </option>
+               </select>
+             </div>
+           </div>
+        <!--  <div class="form-row" *ngFor="let bailleur of bailleurs">
+              haha
+           <div class="form-group col-md-6">
+          <div class="form-check"*ngFor = "let ticket of bailleur.ticketEntities">
+             <input class="form-check-input" type="checkbox" value="" ngModel id="ticketEntities" name="ticketEntities">
+             <label class="form-check-label" for="ticketEntities">
+                {{ticket.ticketNumber}}
+             </label>
+           </div>
+          </div>
+          </div> --> 
+          <div class="modal-footer">
+             <button type="button" id="add-financement-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+          </form>
+       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="updateFinancementModal" tabindex="-1" date_signature="dialog" aria-labelledby="bailleurEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" date_signature="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="updateFinancementModalLabel"><b>Modifier Financement</b></h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm">
+              <input type="hidden" ngModel="{{editFinancement?.id}}" name="id" class="form-control" id="id">
+              <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="code">Code</label>
+                     <input ngModel="{{editFinancement?.code}}" type="number" class="form-control" id="code" name="code" placeholder="Le code" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="date">Date</label>
+                    <input ngModel="{{editFinancement?.date}}" type="date" class="form-control" id="date" name="date" placeholder="La date"  required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="montant_device">Montant en device</label>
+                     <input ngModel="{{editFinancement?.montant_device}}" type="number" step="0.01" class="form-control" id="montant_device" name="montant_device" placeholder="Montant en device" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                     <label for="montant_monnaie_local">Montant en monnaie local</label>
+                     <input  ngModel="{{editFinancement?.montant_monnaie_local}}" step="0.01" type="number" class="form-control" id="montant_monnaie_local" name="montant_monnaie_local" placeholder="Montant en monnaie locale" required>
+                   </div>
+               </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="taux_change">Taux de change</label>
+                     <input ngModel="{{editFinancement?.taux_change}}" type="number" step="0.01" class="form-control" id="taux_change" name="taux_change" placeholder="Taux de change" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                      <label for="date_signature">Date de signature</label>
+                      <input ngModel="{{editFinancement?.date_signature}}" type="date" class="form-control" id="date_signature" name="date_signature" placeholder="Date de signature" required>
+                    </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="date_premier_paiement">Date du premier paiement</label>
+                     <input ngModel="{{editFinancement?.date_premier_paiement}}" type="date" class="form-control" id="date_premier_paiement" name="date_premier_paiement" placeholder="Date du premier paiement" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                     <label for="date_dernier_paiement">Date du dernier paiement</label>
+                     <input ngModel="{{editFinancement?.date_dernier_paiement}}" type="date" class="form-control" id="date_dernier_paiement" name="date_dernier_paiement" placeholder="Date du dernier paiement" required>
+                   </div>
+               </div>
+               <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="numero_loi_finance">Numéro de la loi de finance</label>
+                   <input ngModel="{{editFinancement?.numero_loi_finance}}" type="number" class="form-control" id="numero_loi_finance" name="numero_loi_finance" placeholder="Numéro de la loi de finance" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="date_loi_finance">Date de la loi de finance</label>
+                   <input ngModel="{{editFinancement?.date_loi_finance}}"type="date" class="form-control" id="date_loi_finance" name="date_loi_finance" placeholder="Date de la loi de finance" required>
+                 </div>
+             </div>
+              <div class="modal-footer">
+                 <button type="button" id="add-edit-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                 <button (click)="onUpdateFinancement(editForm.value)" data-dismiss="modal" type="submit" class="btn btn-primary">Modifier</button>
+              </div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+
+ <!-- Delete financement Modal -->
+ <div class="modal fade" id="deleteFinancementModal" tabindex="-1" date_signature="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" date_signature="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteModelLabel">Supprimer le financement ?</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Vous etes sur de bien vouloir supprimer le financement ayant le code : {{deleteFinancement?.code}}  </p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+              <button (click)="onDeleteFinancement(deleteFinancement.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function() {
+    $().ready(function() {
+      $sidebar = $('.sidebar');
+
+      $sidebar_img_container = $sidebar.find('.sidebar-background');
+
+      $full_page = $('.full-page');
+
+      $sidebar_responsive = $('body > .navbar-collapse');
+
+      window_width = $(window).width();
+
+      fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+      if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
+        if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+          $('.fixed-plugin .dropdown').addClass('open');
+        }
+
+      }
+
+      $('.fixed-plugin a').click(function(event) {
+        // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+        if ($(this).hasClass('switch-trigger')) {
+          if (event.stopPropagation) {
+            event.stopPropagation();
+          } else if (window.event) {
+            window.event.cancelBubble = true;
+          }
+        }
+      });
+
+      $('.fixed-plugin .active-color span').click(function() {
+        $full_page_background = $('.full-page-background');
+
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+
+        var new_color = $(this).data('color');
+
+        if ($sidebar.length != 0) {
+          $sidebar.attr('data-color', new_color);
+        }
+
+        if ($full_page.length != 0) {
+          $full_page.attr('filter-color', new_color);
+        }
+
+        if ($sidebar_responsive.length != 0) {
+          $sidebar_responsive.attr('data-color', new_color);
+        }
+      });
+
+      $('.fixed-plugin .background-color .badge').click(function() {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+
+        var new_color = $(this).data('background-color');
+
+        if ($sidebar.length != 0) {
+          $sidebar.attr('data-background-color', new_color);
+        }
+      });
+
+      $('.fixed-plugin .img-holder').click(function() {
+        $full_page_background = $('.full-page-background');
+
+        $(this).parent('li').siblings().removeClass('active');
+        $(this).parent('li').addClass('active');
+
+
+        var new_image = $(this).find("img").attr('src');
+
+        if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+          $sidebar_img_container.fadeOut('fast', function() {
+            $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+            $sidebar_img_container.fadeIn('fast');
+          });
+        }
+
+        if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+          var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+          $full_page_background.fadeOut('fast', function() {
+            $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+            $full_page_background.fadeIn('fast');
+          });
+        }
+
+        if ($('.switch-sidebar-image input:checked').length == 0) {
+          var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+          var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+          $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+          $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+        }
+
+        if ($sidebar_responsive.length != 0) {
+          $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+        }
+      });
+
+      $('.switch-sidebar-image input').change(function() {
+        $full_page_background = $('.full-page-background');
+
+        $input = $(this);
+
+        if ($input.is(':checked')) {
+          if ($sidebar_img_container.length != 0) {
+            $sidebar_img_container.fadeIn('fast');
+            $sidebar.attr('data-image', '#');
+          }
+
+          if ($full_page_background.length != 0) {
+            $full_page_background.fadeIn('fast');
+            $full_page.attr('data-image', '#');
+          }
+
+          background_image = true;
+        } else {
+          if ($sidebar_img_container.length != 0) {
+            $sidebar.removeAttr('data-image');
+            $sidebar_img_container.fadeOut('fast');
+          }
+
+          if ($full_page_background.length != 0) {
+            $full_page.removeAttr('data-image', '#');
+            $full_page_background.fadeOut('fast');
+          }
+
+          background_image = false;
+        }
+      });
+
+      $('.switch-sidebar-mini input').change(function() {
+        $body = $('body');
+
+        $input = $(this);
+
+        if (md.misc.sidebar_mini_active == true) {
+          $('body').removeClass('sidebar-mini');
+          md.misc.sidebar_mini_active = false;
+
+          $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+
+        } else {
+
+          $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+
+          setTimeout(function() {
+            $('body').addClass('sidebar-mini');
+
+            md.misc.sidebar_mini_active = true;
+          }, 300);
+        }
+
+        // we simulate the window Resize so the charts will get updated in realtime.
+        var simulateWindowResize = setInterval(function() {
+          window.dispatchEvent(new Event('resize'));
+        }, 180);
+
+        // we stop the simulation of Window Resize after the animations are completed
+        setTimeout(function() {
+          clearInterval(simulateWindowResize);
+        }, 1000);
+
+      });
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    //init DateTimePickers
+    md.initFormExtendedDatetimepickers();
+  });
+</script>  

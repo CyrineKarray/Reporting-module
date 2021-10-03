@@ -1,0 +1,293 @@
+
+
+
+
+   
+    <div class="main-panel" id="main-container">
+   
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12" >
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-success">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <h4 class="nav-tabs-title">Liste des bailleurs de fond :</h4>
+                      <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" (click)="onOpenModal(null, 'add')" type="button" data-toggle="modal" data-target="#addbailleurModal" >
+                            <i class="material-icons">downloading</i> Ajouter
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#messages" data-toggle="tab">
+                            <i class="material-icons">downloading</i> Télécharger PDF
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        &nbsp;
+                        &nbsp;
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#settings" data-toggle="tab">
+                            <i class="material-icons">code</i> Télécharger HTML
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive" >
+                    <table class="table">
+                      <thead class="text-primary">
+                        <th>
+                          Code
+                        </th>
+                        <th>
+                          Intitulé
+                        </th>
+                        <th>
+                         Adresse
+                        </th>
+                        <th>
+                          Ville
+                        </th>
+                        <th>
+                          Téléphone
+                        </th>
+                        <th>
+                          Action
+                        </th>
+                      </thead>
+                      <tbody *ngFor = "let bailleur of bailleurs">
+                        <tr>
+                          <td>
+                            {{bailleur.code}}
+                          </td>
+                          <td>
+                            {{bailleur.intitule}}
+                          </td>
+                          <td>
+                            {{bailleur.adresse}}
+                          </td>
+                          <td>
+                            {{bailleur.ville}}
+                          </td>
+                          <td class="text-primary">
+                            {{bailleur.telephone}}     
+                          </td>
+                          <td>
+                            <button type="button" data-toggle="modal" data-target="getDetailsModal" class="btn btn-primary btn-link btn-sm" (click)="onOpenModal(bailleur, 'details')">
+                              <i class="material-icons">search</i>
+                            </button>
+                      
+                            <button type="button" (click)="onOpenModal(bailleur, 'edit')" rel="tooltip" title="Edit Task" class="btn btn-warning btn-link btn-sm">
+                              <i class="material-icons">edit</i>
+                            </button>
+                            <button type="button"  (click)="onOpenModal(bailleur, 'delete')"  rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                              <i class="material-icons">close</i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+          </div>
+          
+        </div>
+        
+      </div>
+
+      
+<!-- Add Bailleur Modal -->
+<div class="modal fade" id="addBailleurModal" tabindex="-1" fax="dialog" aria-labelledby="addBailleurModalLabel" aria-hidden="true">
+  <div class="modal-dialog" fax="document">
+    <div class="modal-content">
+       <div class="modal-header">
+          <h5 class="modal-title" id="addBailleurModalLabel" style="font-weight: 700;">Ajouter un nouveau bailleur de fond</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+       </div>
+       <div class="modal-body">
+          <form  #addForm="ngForm" (ngSubmit)="onAddBailleur(addForm)">
+           <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="code">Code</label>
+                <input ngModel type="number" class="form-control" id="code" name="code" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="intitule">Nom du bailleur</label>
+                <input ngModel type="text" class="form-control" id="intitule" name="intitule"  required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="adresse">Adresse</label>
+                 <input ngModel type="text"  class="form-control" id="adresse" name="adresse" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="ville">Ville</label>
+                 <input  ngModel type="text"  class="form-control" id="ville" name="ville" required>
+               </div>
+           </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="telephone">Téléphone</label>
+                 <input ngModel type="text"  class="form-control" id="telephone" name="telephone" required>
+               </div>
+               <div class="form-group col-md-6">
+                  <label for="fax">Fax</label>
+                  <input ngModel type="text" class="form-control" id="fax" name="fax" required>
+                </div>
+           </div>
+           <div class="form-row">
+              <div class="form-group col-md-6">
+                 <label for="email">Adresse mail</label>
+                 <input ngModel type="email" class="form-control" id="email" name="email" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="somme_participation">Somme de participation</label>
+                 <input ngModel type="number" step="0.01" class="form-control" id="somme_participation" name="somme_participation" required>
+               </div>
+           </div>
+
+        <!--  <div class="form-row" *ngFor="let match of matchs">
+              haha
+           <div class="form-group col-md-6">
+          <div class="form-check"*ngFor = "let ticket of match.ticketEntities">
+             <input class="form-check-input" type="checkbox" value="" ngModel id="ticketEntities" name="ticketEntities">
+             <label class="form-check-label" for="ticketEntities">
+                {{ticket.ticketNumber}}
+             </label>
+           </div>
+          </div>
+          </div> --> 
+<br>
+<br>
+          <div class="modal-footer">
+             <button type="button" id="add-bailleur-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+          </form>
+
+    </div>
+  </div>
+  
+</div>
+</div>
+
+<div class="modal fade" id="getDetailsModal" tabindex="-1" fax="dialog" aria-labelledby="BailleurGetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="getDetailsModalLabel"><b>Détail du Bailleur {{bailleurDetails?.bailleur?.intitule}} </b></h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <br>
+        <ul class="list-group">
+          <li class="list-group-item">  <strong>Nom : </strong>{{bailleurDetails?.intitule}}</li>
+          <li class="list-group-item"><strong>Adresse : </strong>{{bailleurDetails?.adresse}}</li>
+          <li class="list-group-item"><strong>Ville : </strong>{{bailleurDetails?.ville}}</li>
+          <li class="list-group-item"><strong>Téléphone : </strong>{{bailleurDetails?.telephone}}</li>
+          <li class="list-group-item"><strong>Adresse mail : </strong>{{bailleurDetails?.mail}}</li>
+          <li class="list-group-item"><strong>Fax : </strong>{{bailleurDetails?.fax}}</li>
+          <li class="list-group-item"><strong>Liste des financements : </strong></li>
+        </ul>
+      </div>
+     </div>
+</div>
+
+<div class="modal fade" id="updateBailleurModal" tabindex="-1" fax="dialog" aria-labelledby="MatchEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog" fax="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="updateBailleurModalLabel"><b>Modifier Bailleur</b></h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #editForm="ngForm">
+              <input type="hidden" ngModel="{{editBailleur?.id}}" name="id" class="form-control" id="id">
+              <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="code">Code</label>
+                     <input ngModel="{{editBailleur?.code}}" type="number" class="form-control" id="code" name="code" placeholder="Le code" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="intitule">Nom du bailleur</label>
+                    <input ngModel="{{editBailleur?.intitule}}" type="text" class="form-control" id="intitule" name="intitule" placeholder="Nom du bailleur"  required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="adresse">Adresse</label>
+                     <input ngModel="{{editBailleur?.adresse}}" type="text" class="form-control" id="adresse" name="adresse" placeholder="Adresse" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                     <label for="ville">Ville</label>
+                     <input  ngModel="{{editBailleur?.ville}}" type="text" class="form-control" id="ville" name="ville" placeholder="Ville" required>
+                   </div>                                                         
+               </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="telephone">Téléphone</label>
+                     <input ngModel="{{editBailleur?.telephone}}" type="text"  class="form-control" id="telephone" name="telephone" placeholder="Téléphone" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                      <label for="fax">Fax</label>
+                      <input ngModel="{{editBailleur?.fax}}" type="text" class="form-control" id="fax" name="fax" placeholder="Fax" required>
+                    </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="email">Adresse mail</label>
+                     <input ngModel="{{editBailleur?.email}}" type="email" class="form-control" id="email" name="email" placeholder="Adresse mail" required>
+                   </div>
+                   <div class="form-group col-md-6">
+                     <label for="somme_participation">Somme de participation</label>
+                     <input ngModel="{{editBailleur?.somme_participation}}" type="text" class="form-control" id="somme_participation" name="Somme de participation" placeholder="Date du dernier paiement" required>
+                   </div>
+               </div>
+
+              <div class="modal-footer">
+                 <button type="button" id="add-edit-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                 <button (click)="onUpdateBailleur(editForm.value)" data-dismiss="modal" type="submit" class="btn btn-primary">Modifier</button>
+              </div>
+           </form>
+        </div>
+     </div>
+  </div>
+</div>
+<!-- Delete Bailleur Modal -->
+<div class="modal fade" id="deleteBailleurModal" tabindex="-1" fax="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" fax="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteModelLabel">Supprimer le Bailleur ?</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Vous etes sur de bien vouloir supprimer le Bailleur ayant le code : {{deleteBailleur?.code}}  </p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+              <button (click)="onDeleteBailleur(deleteBailleur.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
